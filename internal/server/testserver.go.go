@@ -13,6 +13,15 @@ import (
 type TestServer struct {
 }
 
+type ResponseRoot struct {
+	Method     string
+	URL        string
+	Proto      string
+	Header     http.Header
+	RemoteAddr string
+	RequestURI string
+}
+
 func (ts TestServer) handleRoot(w http.ResponseWriter, r *http.Request) {
 	queryParamMap := r.URL.Query()
 	responseTime, ok := queryParamMap["responsetime"]
@@ -26,7 +35,15 @@ func (ts TestServer) handleRoot(w http.ResponseWriter, r *http.Request) {
 		time.Sleep(time.Duration(waitTime) * time.Second)
 	}
 
-	WriteJSON(w, *r)
+	resp := ResponseRoot{
+		Method:     r.Method,
+		URL:        r.URL.String(),
+		Proto:      r.Proto,
+		Header:     r.Header,
+		RemoteAddr: r.RemoteAddr,
+		RequestURI: r.RequestURI,
+	}
+	WriteJSON(w, resp)
 }
 
 func (ts TestServer) Serve(certFile, keyFile string) {
