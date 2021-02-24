@@ -28,7 +28,7 @@ func main() {
 	keyOption := flag.String("key", "", "")
 	flag.Parse()
 
-	if crtOption == nil || keyOption == nil {
+	if len(*crtOption) == 0 || len(*keyOption) == 0 {
 		log.Fatal().Msgf("Provide crt and key")
 	}
 
